@@ -7,7 +7,7 @@ from masonite.provider import ServiceProvider
 from ..drivers import UploadCloudinaryDriver
 
 
-class AzureProvider(ServiceProvider):
+class CloudinaryProvider(ServiceProvider):
 
     wsgi = False
 

@@ -31,11 +31,12 @@ class UploadCloudinaryDriver(BaseUploadDriver, UploadContract):
         Raises:
             DriverLibraryNotFound -- Raises when the cloudinary library is not installed.
         Returns:
-            string -- Returns the file name just saved.
+            dict -- Returns the dict object of cloudinary api response.
         """
 
         try:
             import cloudinary
+            import cloudinary.uploader
         except ImportError:
             raise DriverLibraryNotFound("Could not find the 'cloudinary' driver")
 
@@ -45,10 +46,11 @@ class UploadCloudinaryDriver(BaseUploadDriver, UploadContract):
             api_secret=self.config.DRIVERS['cloudinary']['secret'],
         )
 
-        filename = random_string(15) + fileitem.filename
-
-        cloudinary.uploader.upload(fileitem.file.read())
-        return filename
+        response = cloudinary.uploader.upload(
+            fileitem.file.read(),
+            folder=location,
+        )
+        return response
 
     def store_prepend(self, fileitem, prepend, location=None):
         """Store the file onto the Cloudinary but with a prepended file name.
